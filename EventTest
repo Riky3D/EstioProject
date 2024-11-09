@@ -1,0 +1,17 @@
+{
+  "Records": [
+    {
+      "eventID": "1",
+      "eventName": "INSERT",
+      "dynamodb": {
+        "NewImage": {
+          "city": {"S": "New York"},
+          "timestamp": {"N": "1697047200"},
+          "temperature": {"N": "75"},
+          "weather": {"S": "Clear"},
+          "humidity": {"N": "45"}
+        }
+      }
+    }
+  ]
+}
