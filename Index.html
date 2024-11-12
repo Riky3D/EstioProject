@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DynamoDB Data</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Data from DynamoDB</h1>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>City</th>
+                <th>Temperature (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Weather</th>
+            </tr>
+        </thead>
+        <tbody id="data-container"></tbody>
+    </table>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('https://tcwhyb5jq5.execute-api.eu-west-2.amazonaws.com/default/DatatoWebsite');
+                const data = await response.json();
+
+                const container = document.getElementById('data-container');
+                container.innerHTML = ''; // Clear previous content before appending new data
+                
+                data.forEach(item => {
+                    const row = document.createElement('tr'); // Create a new table row
+
+                    const timestampCell = document.createElement('td');
+                    timestampCell.textContent = item.readable_timestamp;
+                    row.appendChild(timestampCell);
+
+                    const cityCell = document.createElement('td');
+                    cityCell.textContent = item.city;
+                    row.appendChild(cityCell);
+
+                    const tempCell = document.createElement('td');
+                    tempCell.textContent = item.temperature_c.toFixed(2); // Formatting temperature to 2 decimal places
+                    row.appendChild(tempCell);
+
+                    const humidityCell = document.createElement('td');
+                    humidityCell.textContent = item.humidity;
+                    row.appendChild(humidityCell);
+
+                    const weatherCell = document.createElement('td');
+                    weatherCell.textContent = item.weather;
+                    row.appendChild(weatherCell);
+
+                    container.appendChild(row); // Append the row to the table body
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Initial fetch
+        fetchData();
+
+        // Polling every 5 seconds (5000 milliseconds)
+        setInterval(fetchData, 5000);
+    </script>
+</body>
+</html>
